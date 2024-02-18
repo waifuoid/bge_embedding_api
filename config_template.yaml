@@ -1,0 +1,15 @@
+SERVER_HOST: 0.0.0.0
+SERVER_PORT: 6001
+
+# or cpu
+DEVICE: "cuda"
+
+### BGE Config
+BGE_MODEL_NAME: "BAAI/bge-m3"
+BATCH_SIZE: 12
+
+# default embedding type, if request.embedding_type is None, use this.
+# Can be dense, sparse, colbert or all.
+DEFAULT_EMBEDDING_TYPE: "colbert"
+
+RERANK_MODEL_NAME: "BAAI//bge-reranker-large"
