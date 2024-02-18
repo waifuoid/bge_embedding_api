@@ -19,16 +19,18 @@ async def embeddings(request: EmbeddingRequest):
     if model is None:
         load_bge_model(config.BGE_MODEL_NAME, config.DEVICE)
     embedding_type = request.embedding_type
+    input_data = [request.input] if isinstance(request.input, str) else request.input
+
     if embedding_type is None:
         embedding_type = config.DEFAULT_EMBEDDING_TYPE
     if embedding_type == "dense":
-        embeddings = model.encode(request.input, batch_size=config.BATCH_SIZE, normalize_embeddings=True)['dense_vecs']
+        embeddings = model.encode(input_data, batch_size=config.BATCH_SIZE, normalize_embeddings=True)['dense_vecs']
     elif embedding_type == "sparse":
-        embeddings = model.encode(request.input, return_dense=True, return_sparse=True, return_colbert_vecs=False)['lexical_weights']
+        embeddings = model.encode(input_data, return_dense=True, return_sparse=True, return_colbert_vecs=False)['lexical_weights']
     elif embedding_type == "colbert":
-        embeddings = model.encode(request.input, return_dense=True, return_sparse=True, return_colbert_vecs=True)['colbert_vecs']
+        embeddings = model.encode(input_data, return_dense=True, return_sparse=True, return_colbert_vecs=True)['colbert_vecs']
     elif embedding_type == "all":
-        embeddings = model.encode(request.input, return_dense=True, return_sparse=True, return_colbert_vecs=True)
+        embeddings = model.encode(input_data, return_dense=True, return_sparse=True, return_colbert_vecs=True)
     response = {
         "data": [
             {"embedding": embedding, "index": index, "object": "embedding"}
